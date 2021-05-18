@@ -1,0 +1,39 @@
+name: SupportChatRoom
+version: @version@
+main: page.nafuchoco.supportchatroom.SupportChatRoom
+api-version: 1.16
+authors: [ NAFU_at ]
+description: This plugin provides a private chat room that can be used for support operations.
+website: https://toybox.nafuchoco.page/
+
+commands:
+  chatroom:
+    aliases: [ room ]
+
+permissions:
+  supportchat.*:
+    children:
+      - supportchat.open: true
+      - supportchat.invite: true
+      - supportchat.accept: true
+      - supportchat.join: true
+      - supportchat.close: true
+      - supportchat.list: true
+
+  supportchat.open:
+    default: op
+
+  supportchat.invite:
+    default: op
+
+  supportchat.accept:
+    default: true
+
+  supportchat.join:
+    default: op
+
+  supportchat.close:
+    default: op
+
+  supportchat. list:
+    default: op
