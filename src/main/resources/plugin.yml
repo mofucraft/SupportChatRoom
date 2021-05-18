@@ -17,6 +17,7 @@ permissions:
       - supportchat.invite: true
       - supportchat.accept: true
       - supportchat.join: true
+      - supportchat.leave: true
       - supportchat.close: true
       - supportchat.list: true
 
@@ -31,6 +32,9 @@ permissions:
 
   supportchat.join:
     default: op
+
+  supportchat.leave:
+    default: true
 
   supportchat.close:
     default: op
