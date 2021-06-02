@@ -29,6 +29,10 @@ public class AsyncPlayerChatEventListener implements Listener {
         if (joinedRoom != null) {
             joinedRoom.sendRoomMessage(event.getPlayer(), event.getMessage());
             event.setCancelled(true);
+            if (joinedRoom.getLinkedChannel() != null)
+                joinedRoom.getLinkedChannel().sendMessage(
+                        event.getPlayer().getDisplayName() + " ≫ " + event.getMessage()
+                ).submit();
         }
     }
 }

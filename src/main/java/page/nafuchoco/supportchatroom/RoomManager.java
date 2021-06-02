@@ -16,21 +16,40 @@
 
 package page.nafuchoco.supportchatroom;
 
+import github.scarsz.discordsrv.dependencies.jda.api.entities.Category;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 
 public class RoomManager {
     private final Map<UUID, SupportRoom> roomStore;
+    private Category discordCategory;
 
     public RoomManager() {
         roomStore = new HashMap<>();
     }
 
+    public void setDiscordApi(Category category) {
+        this.discordCategory = category;
+    }
+
     public void openRoom(Player owner, String name) {
-        var room = new SupportRoom(UUID.randomUUID(), owner.getUniqueId(), new ArrayList<>(), name);
+        var room = new SupportRoom(UUID.randomUUID(), owner.getUniqueId(), new ArrayList<>());
+        room.setRoomName(name);
+
+        if (discordCategory != null) {
+            try {
+                var channel = discordCategory.createTextChannel("❖SC❖" + name).submit().get();
+                room.setLinkedChannel(channel);
+            } catch (InterruptedException | ExecutionException e) {
+                SupportChatRoom.getInstance().getLogger()
+                        .log(Level.WARNING, "An error has occurred during the integration process with DiscordSRV.", e);
+            }
+        }
         roomStore.put(room.getRoomId(), room);
     }
 
@@ -39,6 +58,7 @@ public class RoomManager {
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .forEach(p -> p.sendMessage("[" + ChatColor.GOLD + "ChatRoom" + ChatColor.RESET + "] " + "Room has been closed by the owner."));
+        room.getLinkedChannel().delete().submit();
         roomStore.remove(room.getRoomId());
     }
 

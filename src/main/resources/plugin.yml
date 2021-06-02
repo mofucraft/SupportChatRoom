@@ -2,6 +2,7 @@ name: SupportChatRoom
 version: @version@
 main: page.nafuchoco.supportchatroom.SupportChatRoom
 api-version: 1.16
+softdepend: [ DiscordSRV ]
 authors: [ NAFU_at ]
 description: This plugin provides a private chat room that can be used for support operations.
 website: https://toybox.nafuchoco.page/

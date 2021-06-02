@@ -16,8 +16,9 @@
 
 package page.nafuchoco.supportchatroom;
 
-import lombok.AllArgsConstructor;
+import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,13 +28,14 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Data
 public class SupportRoom {
     private final UUID roomId;
     private final UUID ownerId;
     private final List<UUID> joinedPlayers;
     private String roomName;
+    private TextChannel linkedChannel;
 
 
     public void sendRoomMessage(Player sender, String message) {
@@ -46,6 +48,20 @@ public class SupportRoom {
 
         var chatMessage = ChatColor.BOLD + "[" + ChatColor.AQUA + roomName + ChatColor.WHITE + "] " + ChatColor.RESET +
                 sender.getDisplayName() + " >> " + ChatColor.translateAlternateColorCodes('&', message);
+        playerList.forEach(p -> p.sendMessage(chatMessage));
+        SupportChatRoom.getInstance().getLogger().info(chatMessage);
+    }
+
+    public void sendRoomMessage(String senderName, String message) {
+        List<Player> playerList = joinedPlayers.stream()
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        if (Bukkit.getPlayer(ownerId) != null)
+            playerList.add(Bukkit.getPlayer(ownerId));
+
+        var chatMessage = ChatColor.BOLD + "[" + ChatColor.AQUA + roomName + ChatColor.WHITE + "] " + ChatColor.RESET +
+                "[D] " + senderName + " >> " + ChatColor.translateAlternateColorCodes('&', message);
         playerList.forEach(p -> p.sendMessage(chatMessage));
         SupportChatRoom.getInstance().getLogger().info(chatMessage);
     }
