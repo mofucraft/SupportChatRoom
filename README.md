@@ -6,6 +6,7 @@ This plugin provides a private chat room that can be used for support operations
 
 - Create a named chat room.
 - Normal chat can be used for chat rooms.
+- Discord integration using DiscordSRV.
 
 ## Requirements
 
